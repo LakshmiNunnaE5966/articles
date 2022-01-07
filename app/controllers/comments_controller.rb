@@ -11,9 +11,11 @@ class CommentsController < ApplicationController
     def create
         article = Article.find(params[:article_id])
         comment = article.comments.create(comment_params)
+        p "padma"
+        # p comment
         # comment.save
         respond_to do |format|
-            format.json { render json: comment}
+            format.json { render json: {status: true}}
         end
     end
 
@@ -40,7 +42,7 @@ class CommentsController < ApplicationController
 
     private
         def comment_params
-          params.require(:comment).permit(:commenter, :descr)
+          params.permit(:commenter, :descr)
         end
     
 end
