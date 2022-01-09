@@ -2,9 +2,7 @@ class ArticlesController < ApplicationController
     def index
         user = User.find(params[:user_id])
         articles = user.articles
-        respond_to do |format|
-            format.json { render json: articles}
-        end
+        render json: articles
     end
 
     def create
@@ -12,17 +10,16 @@ class ArticlesController < ApplicationController
         article = user.articles.create(article_params)
         p "padma"
         p article
-        article.save!
-        respond_to do |format|
-            format.json { render json: article}
+        if article.save
+            render json: article
+        else
+            render json: article.errors
         end
     end
 
     def article_list
         articles=Article.all
-        respond_to do |format|
-            format.json { render json: articles}
-        end
+        render json: articles
     end
 
 
@@ -30,9 +27,7 @@ class ArticlesController < ApplicationController
     def show
         user=User.find(params[:user_id])
         article=user.articles.find(params[:id])
-        respond_to do |format|
-            format.json { render json: article, status: :created, serializer: ArticleSerializer}
-        end
+        render json: article
     end
 
     
@@ -42,8 +37,10 @@ class ArticlesController < ApplicationController
         article = user.articles.find(params[:id])
         article.update(article_params)
         # article.save
-        respond_to do |format|
-            format.json { render json: article}
+        if article.save
+            render json: article
+        else
+            render json: article.errors
         end
     end
 
@@ -51,9 +48,7 @@ class ArticlesController < ApplicationController
         user = User.find(params[:user_id])
         article=user.articles.find(params[:id])
         article.destroy
-        respond_to do |format|
-            format.json { render json: article, status: :created}
-        end
+        render text: "Article deleted successfully"  
     end
 
        
